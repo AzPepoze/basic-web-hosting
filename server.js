@@ -6,7 +6,7 @@ const app = express();
 const port = 3000;
 
 const mongoUrl = "mongodb://localhost:27017";
-const dbName = "visit-counter";
+const dbName = "test";
 const collectionName = "counters";
 
 app.use(express.static("public"));
