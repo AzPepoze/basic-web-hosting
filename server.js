@@ -5,13 +5,11 @@ const { MongoClient } = require("mongodb");
 const app = express();
 const port = 3000;
 
-const mongoUrl = "mongodb://localhost:27017";
+const mongoUrl = "mongodb://dbadmin:12345678@localhost:27017/?authSource=admin";
 const dbName = "test";
 const collectionName = "counters";
 
 app.get("/", async (req, res) => {
-	console.log("hmm");
-
 	const client = new MongoClient(mongoUrl);
 
 	try {
