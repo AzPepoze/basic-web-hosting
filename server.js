@@ -23,6 +23,7 @@ app.get("/", async (req, res) => {
 			{ upsert: true, returnDocument: "after" }
 		);
 
+		console.log(result);
 		console.log(`Visit count: ${result.value.count}`);
 	} catch (err) {
 		console.error("Failed to update visit count", err);
