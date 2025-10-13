@@ -9,9 +9,9 @@ const mongoUrl = "mongodb://localhost:27017";
 const dbName = "test";
 const collectionName = "counters";
 
-app.use(express.static("public"));
-
 app.get("/", async (req, res) => {
+	console.log("hmm");
+
 	const client = new MongoClient(mongoUrl);
 
 	try {
