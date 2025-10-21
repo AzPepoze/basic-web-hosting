@@ -1,10 +1,17 @@
 require("dotenv").config();
 const express = require("express");
 const path = require("path");
+const https = require("https");
+const fs = require("fs");
 const { MongoClient } = require("mongodb");
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+const sslOptions = {
+	key: fs.readFileSync(path.join(__dirname, "key.pem")),
+	cert: fs.readFileSync(path.join(__dirname, "cert.pem")),
+};
 
 const mongo_url = process.env.MONGO_URL;
 const dbName = process.env.DB_NAME;
@@ -25,6 +32,7 @@ async function connectToMongo() {
 }
 
 app.get("/", async (req, res) => {
+	let visitCount = 0;
 	try {
 		const db = client.db(dbName);
 		const collection = db.collection(collectionName);
@@ -35,18 +43,19 @@ app.get("/", async (req, res) => {
 			{ upsert: true, returnDocument: "after" }
 		);
 
-		console.log(`Visit count: ${result.count}`);
+		if (result) {
+			visitCount = result.count;
+			console.log(`Visit count: ${visitCount}`);
+		}
 	} catch (err) {
 		console.error("Failed to update visit count", err);
-		res.status(500).send("Failed to update visit count");
-	} finally {
 	}
 
 	res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 connectToMongo().then(() => {
-	app.listen(port, () => {
-		console.log(`Server listening at http://localhost:${port}`);
+	https.createServer(sslOptions, app).listen(port, () => {
+		console.log(`Server listening at https://localhost:${port}`);
 	});
 });
