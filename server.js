@@ -1,13 +1,14 @@
+require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const { MongoClient } = require("mongodb");
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
-const mongoUrl = "mongodb://dbadmin:12345678@localhost:27017/?authSource=admin";
-const dbName = "test";
-const collectionName = "counters";
+const mongoUrl = process.env.MONGO_URL;
+const dbName = process.env.DB_NAME;
+const collectionName = process.env.COLLECTION_NAME;
 
 app.get("/", async (req, res) => {
 	const client = new MongoClient(mongoUrl);
